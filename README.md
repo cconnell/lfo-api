@@ -1,8 +1,6 @@
 # CustomerScoring
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/customer_scoring`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-Delete this and the text above, and describe your gem
+This gem is a wrapper for the Customer Scoring Advice API and allows easy access to API through Ruby.
 
 ## Installation
 
@@ -22,9 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
+To access the API, initialize a customer using their income, zip code, and age as arguments.  Arguments are passed as strings.
 ```ruby
-customer = CustomerScoring::Customer.score
+customer = CustomerScoring::Customer.score("income", "zipcode", "age")
 customer.propensity
+customer.ranking
 
 ```
 
