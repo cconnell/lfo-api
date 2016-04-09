@@ -3,7 +3,7 @@
 This gem is a wrapper for the Customer Scoring Advice API and allows easy access to the API with simple Ruby.
 
 ## Dependencies
-The gem requires Ruby v. 2.2.3p173 and the following gems:
+The gem requires Ruby v. 2.2.3 and the following gems:
 ```ruby
 bundler, "~> 1.11"
 rake, "~> 10.0"
