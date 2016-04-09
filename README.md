@@ -1,45 +1,63 @@
 # CustomerScoring
 
-This gem is a wrapper for the Customer Scoring Advice API and allows easy access to API through Ruby.
+This gem is a wrapper for the Customer Scoring Advice API and allows easy access to the API with simple Ruby.
+
+## Dependencies
+The gem requires Ruby v. 2.2.3p173 and the following gems:
+```ruby
+bundler, "~> 1.11"
+rake, "~> 10.0"
+rspec, "~> 3.0"
+unirest, "~>1.1.2"
+```
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Download or clone the repo.  Using terminal, navigate to the root directory and execute:
 
 ```ruby
-gem 'customer_scoring'
+bundle exec rake install
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install customer_scoring
 
 ## Usage
 
+Open irb and require the gem:
+```ruby
+require 'customer_scoring'
+```
 To access the API, initialize a customer using their income, zip code, and age as arguments.  Arguments are passed as strings.
 ```ruby
 customer = CustomerScoring::Customer.score("income", "zipcode", "age")
-customer.propensity
-customer.ranking
-
+```
+Example:
+```ruby
+customer = CustomerScoring::Customer.score("50000", "60201", "35")
 ```
 
-## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+To access propensity and ranking for the customer:
+```ruby
+customer.propensity
+=>0.26532
+customer.ranking
+=>"C"
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+## Testing
+
+RSpec tests are included.  These tests will test the for both number of arguments and the server response. To run the tests, navigate to the root directory in terminal and execute:
+```ruby
+rspec
+```
+
+
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/customer_scoring.
+Bug reports and pull requests are welcome on GitHub at https://github.com/cconnell/customer_scoring.
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-

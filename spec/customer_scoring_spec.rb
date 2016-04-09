@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe CustomerScoring do
-  it 'has a version number' do
-    expect(CustomerScoring::VERSION).not_to be nil
-  end
   it 'gets an http response' do
     expect(CustomerScoring::Customer.score("x", "y", "z")).not_to be nil
   end
@@ -20,7 +17,7 @@ describe CustomerScoring do
   end
 
    it 'requires less than four arguments' do
-    expect{CustomerScoring::Customer.score("x", "y", "z", "zz")}.to raise_error(ArgumentError)
+    expect{CustomerScoring::Customer.score("x", "y", "z", "xx")}.to raise_error(ArgumentError)
   end
 
 end
