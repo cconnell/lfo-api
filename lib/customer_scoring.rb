@@ -1,7 +1,5 @@
 require "customer_scoring/version"
-require 'unirest'
 require 'vcr'
-require 'webmock'
 require 'net/http'
 
 module CustomerScoring
@@ -28,20 +26,25 @@ module CustomerScoring
       if errors.length > 0
         return errors
       else
-        uri = URI.parse('http://yahoo.com/customer_scoring?'),
-        params = {:income => "#{income}", :zipcode => "#{zipcode}", :age => "#{age}"}
-        # uri = URI('http://yahoo.com/customer_scoring?income=#{URI.encode(income)}&zipcode=#{URI.encode(zipcode)}&age=#{URI.encode(age)}')
-        api_response_hash = Net::HTTP.get(uri)
+        # response = Net::HTTP.get_response(URI("https://www.yahoo.com/customer_scoring?income=#{"income"}&zipcode=#{"zipcode"}&age=#{"age"}"))
+        response = Net::HTTP.get_response(URI("https://api.myjson.com/bins/4jbfc"))
+        http_response_code = response.code.to_i
+          if http_response_code == 200
+            response_body = response.body
+            temp_score = []
+            score_hash = {}
 
-        # api_response_hash = Unirest.get("http://yahoo.com/customer_scoring?income=#{income}&zipcode=#{zipcode}&age=#{age}")
-        http_response = api_response_hash.code
-          if http_response == 200
-            response_body = api_response_hash.body
-            return OpenStruct.new(response_body)
+            temp_score << response_body.scan(/\d(.....)\d/)[0][0]
+            score_hash[:propensity] = temp_score[0]
+            
+            temp_score << response_body.scan(/\b[A-Z]/)
+            score_hash[:ranking] = temp_score[1][0]
+
+            return OpenStruct.new(score_hash)
           else
-            if http_response.between?(400, 499)
+            if http_response_code.between?(400, 499)
                 "#{http_response} error - Please verify your paramaters"
-            elsif http_response.between?(500, 599)
+            elsif http_response_code.between?(500, 599)
                 "#{http_response} error - Please try again.  If error continues contact administrator."
             else
                 "Something isn't right... please try again."
