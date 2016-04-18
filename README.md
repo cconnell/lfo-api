@@ -5,10 +5,11 @@ This gem is a wrapper for the Customer Scoring Advice API and allows easy access
 ## Dependencies
 The gem requires Ruby v. 2.2.3 and the following gems:
 ```ruby
-bundler, "~> 1.11"
-rake, "~> 10.0"
-rspec, "~> 3.0"
-unirest, "~>1.1.2"
+"bundler", "~> 1.11"
+"rake", "~> 10.0"
+"rspec", "~> 3.0"
+"vcr", "~> 3.0.1"
+"webmock", "~> 1.24.3"
 ```
 
 ## Installation
