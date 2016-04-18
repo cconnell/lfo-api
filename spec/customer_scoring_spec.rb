@@ -27,15 +27,21 @@ describe CustomerScoring do
   end
 
   it 'gets an http response' do
+    VCR.use_cassette('api_response') do
     expect(CustomerScoring::Customer.score("0", "00000", "1")).not_to be nil
+    end
   end
+
   it 'does not get an http response' do
+    VCR.use_cassette('api_response') do
     expect(CustomerScoring::Customer.score("0", "00000", "1")).not_to be false
+    end
   end
 
   it 'returns an error message if score info not found' do
-    expect(CustomerScoring::Customer.score("0", "00000", "1")).to eq "404 error - Please verify your paramaters"
+    VCR.use_cassette('api_response') do
+    expect(CustomerScoring::Customer.score("0", "00000", "1")).to eq "404 error - Please verify your paramaters" 
+    end
   end
-
 
 end

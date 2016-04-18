@@ -1,6 +1,7 @@
 require "customer_scoring/version"
-require 'vcr'
 require 'net/http'
+require 'ostruct'
+
 
 module CustomerScoring
   class Customer
@@ -26,8 +27,8 @@ module CustomerScoring
       if errors.length > 0
         return errors
       else
-        # response = Net::HTTP.get_response(URI("https://www.yahoo.com/customer_scoring?income=#{"income"}&zipcode=#{"zipcode"}&age=#{"age"}"))
-        response = Net::HTTP.get_response(URI("https://api.myjson.com/bins/4jbfc"))
+        response = Net::HTTP.get_response(URI("https://not_real.com/customer_scoring?income=#{"income"}&zipcode=#{"zipcode"}&age=#{"age"}"))
+        
         http_response_code = response.code.to_i
           if http_response_code == 200
             response_body = response.body
@@ -43,9 +44,9 @@ module CustomerScoring
             return OpenStruct.new(score_hash)
           else
             if http_response_code.between?(400, 499)
-                "#{http_response} error - Please verify your paramaters"
+                "#{http_response_code} error - Please verify your paramaters"
             elsif http_response_code.between?(500, 599)
-                "#{http_response} error - Please try again.  If error continues contact administrator."
+                "#{http_response_code} error - Please try again.  If error continues contact administrator."
             else
                 "Something isn't right... please try again."
             end
