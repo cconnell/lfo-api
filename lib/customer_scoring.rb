@@ -1,5 +1,8 @@
 require "customer_scoring/version"
 require 'unirest'
+require 'vcr'
+require 'webmock'
+require 'net/http'
 
 module CustomerScoring
   class Customer
@@ -25,7 +28,12 @@ module CustomerScoring
       if errors.length > 0
         return errors
       else
-        api_response_hash = Unirest.get("http://yahoo.com/customer_scoring?income=#{income}&zipcode=#{zipcode}&age=#{age}")
+        uri = URI.parse('http://yahoo.com/customer_scoring?'),
+        params = {:income => "#{income}", :zipcode => "#{zipcode}", :age => "#{age}"}
+        # uri = URI('http://yahoo.com/customer_scoring?income=#{URI.encode(income)}&zipcode=#{URI.encode(zipcode)}&age=#{URI.encode(age)}')
+        api_response_hash = Net::HTTP.get(uri)
+
+        # api_response_hash = Unirest.get("http://yahoo.com/customer_scoring?income=#{income}&zipcode=#{zipcode}&age=#{age}")
         http_response = api_response_hash.code
           if http_response == 200
             response_body = api_response_hash.body
