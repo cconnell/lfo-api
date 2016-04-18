@@ -1,5 +1,7 @@
 require "customer_scoring/version"
-require 'unirest'
+require 'net/http'
+require 'ostruct'
+
 
 module CustomerScoring
   class Customer
@@ -25,16 +27,26 @@ module CustomerScoring
       if errors.length > 0
         return errors
       else
-        api_response_hash = Unirest.get("http://yahoo.com/customer_scoring?income=#{income}&zipcode=#{zipcode}&age=#{age}")
-        http_response = api_response_hash.code
-          if http_response == 200
-            response_body = api_response_hash.body
-            return OpenStruct.new(response_body)
+        response = Net::HTTP.get_response(URI("https://not_real.com/customer_scoring?income=#{"income"}&zipcode=#{"zipcode"}&age=#{"age"}"))
+        
+        http_response_code = response.code.to_i
+          if http_response_code == 200
+            response_body = response.body
+            temp_score = []
+            score_hash = {}
+
+            temp_score << response_body.scan(/\d(.....)\d/)[0][0]
+            score_hash[:propensity] = temp_score[0]
+            
+            temp_score << response_body.scan(/\b[A-Z]/)
+            score_hash[:ranking] = temp_score[1][0]
+
+            return OpenStruct.new(score_hash)
           else
-            if http_response.between?(400, 499)
-                "#{http_response} error - Please verify your paramaters"
-            elsif http_response.between?(500, 599)
-                "#{http_response} error - Please try again.  If error continues contact administrator."
+            if http_response_code.between?(400, 499)
+                "#{http_response_code} error - Please verify your paramaters"
+            elsif http_response_code.between?(500, 599)
+                "#{http_response_code} error - Please try again.  If error continues contact administrator."
             else
                 "Something isn't right... please try again."
             end
